@@ -56,7 +56,7 @@ public class Product implements Cloneable
         return products;
     }
 
-    public static void getByPackageid(Package pack)
+    public static void getByPackageid(Packages pack)
     {
         getByPackageId(pack.getPackageId());
     }

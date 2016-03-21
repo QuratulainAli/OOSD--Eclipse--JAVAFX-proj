@@ -3,16 +3,20 @@
  */
 package travelexperts.controller;
 
+import java.util.ArrayList;
 import java.util.Vector;
-import javafx.event.EventHandler;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.cell.ComboBoxTableCell;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
+import javafx.util.converter.DefaultStringConverter;
 import travelexperts.model.Agent;
+import travelexperts.model.Customer;
 
 /**
  * @author 716488
@@ -24,23 +28,35 @@ public class AgentController {
 	@FXML
 	public ComboBox<Integer> agentIDC;
 	@FXML
-	private TextField  fnameT;
+	private Label  fnameL;
 	@FXML
-	private TextField  mnameT;
+	private Label  mnameL;
 	@FXML
-	private TextField  lnameT;
+	private Label  lnameL;
 	@FXML
-	private TextField  bphoneT;
+	private Label  bphoneL;
 	@FXML
-	private TextField  emailT;
+	private Label  emailL;
 	@FXML
-	private TextField  posT;
+	private Label  posL;
 	@FXML
-	private TextField agencyIDT;
+	private Label agencyIDL;
 	@FXML
-	private CheckBox agentStatusC;
+	private Label valueDisplayL;
+	@FXML
+	public CheckBox agentStatusC;
 	@FXML
 	private Button exitButton;
+	@FXML
+	private Button saveButton;
+	@FXML
+    private TableView<Customer> customerAgentTable;
+    @FXML
+    private TableColumn<Customer, String> customerFirstNameColumn;
+    @FXML
+    private TableColumn<Customer, String> customerLastNameColumn;
+    @FXML
+    private TableColumn<Customer, String> agentIDColumn;
 	
 	// Combobox Default Value
 	private int defaultIndex =1;
@@ -54,26 +70,63 @@ public class AgentController {
 	    private void initialize() 
 	 	{
 		 agentIDC.setValue(defaultIndex);
-         agentStatusC.setSelected(false);
+         agentStatusC.setSelected(true);
          showAgentsInfo();
+         
+         customerAgentTable.setEditable(true);
+	 		customerFirstNameColumn.setCellValueFactory(new PropertyValueFactory<Customer, String>("CustFirstName"));
+	 		customerLastNameColumn.setCellValueFactory(new PropertyValueFactory<Customer, String>("CustLastName"));
+	 		//agentIDColumn.setCellValueFactory(new PropertyValueFactory<Customer, String>("AgentId"));
+	 		
+	 		ObservableList<Integer> cbValues = getAllAgentsIDs();
+	 	    agentIDColumn.setCellFactory(ComboBoxTableCell.forTableColumn(new DefaultStringConverter(), cbValues.toString() ));
+	 		customerAgentTable.setItems( showCustomersWithAgentID(agentIDC.getValue()));
+				 		
+
+ 		
 	    }
-    //button listener
+	 private ObservableList<Integer> getAllAgentsIDs() {
+			// TODO Auto-generated method stub
+			Vector<Agent> allAgents = new Vector<Agent>();
+			allAgents=Agent.getAll();
+			
+			ArrayList<Integer> allAgentsAvailable = new ArrayList<Integer>() ;
+			for(Agent agent: allAgents)
+			{
+				allAgentsAvailable.add(agent.getAgentId());
+				
+			}
+			
+			ObservableList<Integer> allAgent = FXCollections.observableList(allAgentsAvailable);
+			
+			return  allAgent;
+		}
+	 private ObservableList<Customer> showCustomersWithAgentID(int i) {
+			// TODO Auto-generated method stub
+			Vector<Customer> myCustomers = new Vector<Customer>();
+			myCustomers=Customer.getByAgentId(i);
+			
+			ObservableList<Customer> agentsCustomer = FXCollections.observableList(myCustomers);
+			return agentsCustomer;
+			
+		}
+    //Exit button listener
 	 @FXML
 	    private void exit() {
 		 
-		 Alert alert = new Alert(AlertType.CONFIRMATION);
-		 alert.setTitle("Confirmation Dialog");
-		 alert.setHeaderText("Look, a Confirmation Dialog");
-		 alert.setContentText("Are you ok with this?");
+		  // get a handle to the stage
+		    Stage stage = (Stage) exitButton.getScene().getWindow();
+		    // do what you have to do
+		    stage.close();
 
 		
 	    }
 	
+	 
 	//calling agents to combobox
 	public void showAgentsInfo()
 	{
 		
-		travelexperts.model.TravelExpertsDB.connectDB();
 		
 		Vector<Agent> myAgent = new Vector<Agent>();
 		myAgent=agentC.getAll();
@@ -89,37 +142,37 @@ public class AgentController {
 	public void AgentComboListener() {
 		// TODO Auto-generated method stub
 		getAgentData((int)agentIDC.getValue());
+		customerAgentTable.setItems( showCustomersWithAgentID((int)agentIDC.getValue()));
+		
 	}
 	
 	// Changing Value on combobox selection
 	public void getAgentData(int value) {
 		// TODO Auto-generated method stub
-		Agent myAgent = new Agent();
-		myAgent=Agent.getById(value);
+		 Agent myAgent = new Agent();
+	     myAgent=Agent.getById(value);
 			
 		if( agentIDC.getValue() != null){
         	String fname= myAgent.getAgtFirstName();
-			fnameT.setText(fname);
+			fnameL.setText(fname);
 			String lname= myAgent.getAgtLastName();
-			lnameT.setText(lname);
+			lnameL.setText(lname);
 			String mname= myAgent.getAgtMiddleInitial();
-			mnameT.setText(mname);
+			mnameL.setText(mname);
 			String busPhone= myAgent.getAgtBusPhone();
-			bphoneT.setText(busPhone);
+			bphoneL.setText(busPhone);
 			String email= myAgent.getAgtEmail();
-			emailT.setText(email);
+			emailL.setText(email);
 			String pos= myAgent.getAgtPosition();
-			posT.setText(pos);
+			posL.setText(pos);
 			String agyID= Integer.toString(myAgent.getAgencyId());
-			agencyIDT.setText(agyID);
+			agencyIDL.setText(agyID);
 			Boolean agentStatus = myAgent.getActive();
 			agentStatusC.setSelected(agentStatus);
 		}
 
 	}
-	/**
-	 * @param main
-	 */
+	
 	public void setMainApp(Main main) {
 		// TODO Auto-generated method stub
 		 this.mainApp = mainApp;
@@ -127,4 +180,41 @@ public class AgentController {
 		 
 	}
 	
-}
+	 //Save button listener
+	 @FXML
+	 public void saveEventHandler() 
+	 	{
+		 Agent oldAgent = new Agent();
+		 Agent newAgent = new Agent();
+		// Agent updatedAgent = new Agent();
+		 oldAgent=Agent.getById((int)agentIDC.getValue());
+		 
+		 newAgent.setAgentId(agentIDC.getValue());
+		 newAgent.setAgtFirstName(fnameL.toString());
+		 newAgent.setAgtMiddleInitial(mnameL.toString());
+		 newAgent.setAgtLastName(lnameL.toString());
+		 newAgent.setAgtBusPhone(bphoneL.toString());
+		 newAgent.setAgtEmail(emailL.toString());
+		 newAgent.setAgtPosition(posL.toString());
+		 Integer Q = Integer.parseUnsignedInt(agencyIDL.toString());//.parseInt(agencyIDT.toString());
+		 newAgent.setAgencyId(Q);
+		 newAgent.setActive(Boolean.valueOf(agentStatusC.toString()));
+		 
+		 int Status = Agent.update(oldAgent, newAgent);
+		 valueDisplayL.visibleProperty();
+		 if( Status == 0)
+		 {
+			 
+		 valueDisplayL.setText("Data Saved");
+		 }
+		 else
+		 { 
+		 valueDisplayL.setText(Q.toString());
+		 }
+	    }
+	  
+	     
+	    
+	  
+	 }
+
