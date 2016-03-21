@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane maxHeight="450.0" maxWidth="800.0" minHeight="450.0" minWidth="800.0" prefHeight="450.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="travelexperts.controller.Main">
+<BorderPane maxHeight="450.0" maxWidth="800.0" minHeight="450.0" minWidth="800.0" stylesheets="@../view/style.css"  prefHeight="450.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="travelexperts.controller.Main">
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
