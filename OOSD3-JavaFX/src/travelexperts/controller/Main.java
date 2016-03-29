@@ -109,10 +109,8 @@ public class Main extends Application {
 		catch (IOException e) {
 	            e.printStackTrace();
 	            return null;
-	        }
-		
+	        }		
 	}
-
 		public AnchorPane showPackagesOverview() {
         try {
             

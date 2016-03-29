@@ -1,0 +1,3 @@
+.agent-left-pane {
+	   -fx-background-color: transparent, derive(#1d1d1d,20%);
+}

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane maxHeight="450.0" maxWidth="800.0" minHeight="450.0" minWidth="800.0" prefHeight="450.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" stylesheet ="@../View/style.css" xmlns:fx="http://javafx.com/fxml/1" fx:controller="travelexperts.controller.Main">
+   <top>
+      <MenuBar BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Close" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Edit">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Delete" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </top>
+   <center>
+      <TabPane fx:id="travelExpertsTabpane" prefHeight="431.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE" tabMinHeight="25.0" tabMinWidth="25.0" BorderPane.alignment="CENTER">
+        <tabs>
+          <Tab fx:id="packagesTab" text="Packages" />
+          <Tab fx:id="agentsTab" text=" Agents " />
+        </tabs>
+         <padding>
+            <Insets top="-20.0" />
+         </padding>
+      </TabPane>
+   </center>
+</BorderPane>
